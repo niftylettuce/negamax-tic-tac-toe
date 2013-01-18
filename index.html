@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+  <head>
+    <title>Negamax Tic-tac-toe</title>
+    <link rel="stylesheet" href="css/zepto-ttt.css">
+  </head>
+  <body>
+    <h1>Negamax Tic-tac-toe</h1>
+    <form>
+      <legend>Options</legend>
+      <label for='size'>
+        Size: <input id='size' name='size' type='number' min=3 max=12 value=3 />
+      </label>
+      <label for='type'>
+        Type:
+        <select id='type'>
+          <option value=1>Computer vs Computer</option>
+          <option value=0>Computer vs Player</option>
+        </select>
+      </label>
+      <input type='submit' value='Play' />
+    </form>
+    <table></table>
+    <script src="js/vendor/zepto.min.js"></script>
+    <script src="js/zepto-ttt.js"></script>
+    <script src="js/example.js"></script>
+  </body>
+</html>
