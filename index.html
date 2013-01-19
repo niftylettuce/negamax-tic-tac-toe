@@ -8,7 +8,7 @@
     <form>
       <legend>Options</legend>
       <label for='size'>
-        Size: <input id='size' name='size' type='number' min=3 max=12 value=3 />
+        Size: <input id='size' type='number' min=3 max=12 value=3 />
       </label>
       <label for='type'>
         Type:
@@ -18,9 +18,13 @@
           <option value='pp'>Player vs Player</option>
         </select>
       </label>
+      <label for='depth'>
+        Depth: <input id='depth' type='number' min=2 max=10 value=9 />
+      </label>
       <input type='submit' value='Play' />
     </form>
     <table></table>
+    <p>Score: <span id='score'></span></p>
     <script src="js/vendor/zepto.min.js"></script>
     <script src="js/zepto-ttt.js"></script>
     <script src="js/example.js"></script>

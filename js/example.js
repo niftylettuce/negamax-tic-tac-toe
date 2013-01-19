@@ -9,10 +9,11 @@
     var opts = {
         size: parseInt($('#size').val(), 10)
       , players: $('#type').val()
+      , depth: parseInt($('#depth').val(), 10)
     }
     $('table').ttt(opts)
   }
 
-  $('table').ttt()
+  $('form').submit()
 
 })(Zepto)
