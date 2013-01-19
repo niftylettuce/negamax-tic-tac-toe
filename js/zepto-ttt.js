@@ -4,21 +4,37 @@
 
   var defaults = {
       size: 3
-    , player: false
+    , players: 'cc'
   }
 
   function TTT($table, opts) {
     this.opts = $.extend(defaults, opts)
     this.$table = $table
-    this.play()
+    this.players = this.opts.players.split('').map(function(type) {
+      return (type === 'p') ? new Player() : new AI()
+    })
+    this.board = new Board(this.opts.size)
     this.render()
+    this.makeNextMove()
+  }
+
+  TTT.prototype.makeNextMove = function makeNextMove() {
+    if (this.board.ended()) return
+    if (this.getPlayer().nextMove) {
+      var nextMove = this.getPlayer().nextMove(this.board)
+      this.board.move(nextMove[0], nextMove[1])
+      this.render()
+      setTimeout(this.makeNextMove.bind(this), 100)
+    }
+  }
+
+  TTT.prototype.getPlayer = function getPlayer() {
+    return this.players[this.board.getPlayerIndex()]
   }
 
   TTT.prototype.render = function render() {
 
     var that = this
-
-    console.log(that.$table)
 
     that.$table.empty()
 
@@ -33,25 +49,39 @@
     }
 
     function click(r, c) {
+      if (this.board.ended()) return
+      if (this.getPlayer().nextMove) return
       that.board.move(r, c)
       that.render()
+      that.makeNextMove()
     }
 
   }
 
-  TTT.prototype.play = function play() {
-    this.board = new BoardState(this.opts.size)
+  function Player() {
+  }
+
+  function AI() {
+  }
+
+  AI.prototype.nextMove = function nextMove(board) {
+    for(var r=0; r<board.size; r++) {
+      for(var c=0; c<board.size; c++) {
+        if (board.empty(r, c))
+          return [r, c]
+      }
+    }
   }
 
   function negamax(node, depth) {
-
   }
 
-  function BoardState(size) {
+  function Board(size) {
     this.grid = []
-    for(var r=0; r<size; r+=1) {
+    this.size = size
+    for(var r=0; r<size; r++) {
       var row = []
-      for(var c=0; c<size; c+=1) {
+      for(var c=0; c<size; c++) {
         row.push(0)
       }
       this.grid.push(row)
@@ -61,7 +91,11 @@
     return this
   }
 
-  BoardState.prototype.getPiece = function getPiece(r, c) {
+  Board.prototype.getPlayerIndex = function() {
+    return (this.player === 1) ? 0 : 1
+  }
+
+  Board.prototype.getPiece = function getPiece(r, c) {
     switch(this.grid[r][c]) {
       case 1:
         return 'x'
@@ -72,11 +106,15 @@
     }
   }
 
-  BoardState.prototype.empty = function empty(r, c) {
+  Board.prototype.ended = function ended() {
+    return (this.count === this.size * this.size)
+  }
+
+  Board.prototype.empty = function empty(r, c) {
     return (this.grid[r][c] === 0)
   }
 
-  BoardState.prototype.move = function move(r, c) {
+  Board.prototype.move = function move(r, c) {
     if (!this.empty(r, c)) return false
     this.grid[r][c] = this.player
     this.player = -this.player
