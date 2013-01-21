@@ -4,7 +4,7 @@
 
   var defaults = {
       size: 3
-    , players: 'cc'
+    , players: 'pc'
     , depth: 9
   }
 
